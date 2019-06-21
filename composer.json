@@ -1,0 +1,11 @@
+{
+    "require": {
+        "kelvinmo/simplejwt": "^0.2.4",
+        "composer/satis": "dev-master"
+    },
+    "autoload": {
+    	"files": [
+    		"util.php"
+    	]
+    }
+}

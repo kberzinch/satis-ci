@@ -1,0 +1,7 @@
+/public/*
+!/public/webhook.php
+!/public/setup.php
+!/public/finish.php
+/vendor/
+config.php
+satis.json
