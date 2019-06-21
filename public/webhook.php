@@ -60,7 +60,8 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             }
             die;
         }
+        exit;
     default:
-        echo 'Unrecognized event '. $_SERVER['HTTP_X_GITHUB_EVENT'];
+        echo 'Unrecognized event ' . $_SERVER['HTTP_X_GITHUB_EVENT'];
         exit;
 }
