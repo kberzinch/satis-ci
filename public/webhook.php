@@ -39,7 +39,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
         passthru(
-            '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../vendor/bin/satis build --repository-url '
+            '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../vendor/bin/satis build --no-interaction --repository-url '
                 . $payload['repository']['clone_url'] . ' ' . __DIR__ . '/../satis.json ' . __DIR__ . '/../build/ >> '
                 . $logfile . ' 2>&1',
             $return_value
