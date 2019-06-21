@@ -36,7 +36,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
                     which_github() => token(),
                 ],
             ]
-        )
+        );
 
         putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
