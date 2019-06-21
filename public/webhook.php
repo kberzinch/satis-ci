@@ -1,4 +1,4 @@
-<?php declare(strict = 1);
+<?php declare(strict_types = 1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config.php';
@@ -28,8 +28,6 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             FILE_APPEND
         );
 
-        echo 'View job log at ' . $base_url . '/' . $repo . '/' . $payload['release']['id'] . '.txt';
-
         $composer_auth_blob = json_encode(
             [
                 'github-oauth' => [
@@ -48,11 +46,15 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         );
 
         if (0 !== $return_value) {
+            $log = file_get_contents($logfile);
+            if (false === $log) {
+                $log = 'Could not read log file.';
+            }
             if (isset($email_from, $email_to)) {
                 mail(
                     $email_to,
                     '[' . $payload['repository']['full_name'] . '] Release publication failed',
-                    file_get_contents($logfile),
+                    $log,
                     'From: ' . $email_from
                 );
             }

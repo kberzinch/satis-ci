@@ -7,9 +7,9 @@ if (file_exists(__DIR__ . '/../config.php')) {
 }
 
 if (!isset($_GET['code'])) {
-    $code_somewhere = explode('?', $_GET['urlprefix']);
+    $code_somewhere = explode('?', $_GET['github']);
     $_GET['code'] = substr($code_somewhere[1], 5, strlen($code_somewhere[1]));
-    $_GET['urlprefix'] = $code_somewhere[0];
+    $_GET['github'] = $code_somewhere[0];
 }
 
 $curl = curl_init(
@@ -47,7 +47,6 @@ if (false === $success) {
 $success = file_put_contents(
     __DIR__ . '/../config.php',
     '<?php' . "\n\n" . '$webhook_secret = \'' . $response->webhook_secret . "';\n"
-    . '$url_prefix = \'' . $_GET['urlprefix'] . "';\n"
     . '$private_key[\'' . $_GET['github'] . "'] = '" . __DIR__ . '/../' . $_GET['github'] . '-private-key.pem' . "';\n"
     . '$app_id[\'' . $_GET['github'] . "'] = " . $response->id . ";\n"
 );

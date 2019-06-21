@@ -1,6 +1,4 @@
-<?php declare(strict = 1);
-
-$base_url = 'https://satis-ci.example.com';
+<?php declare(strict_types = 1);
 
 // Email configuration to receive alerts if a build fails
 // $email_from = 'noreply@example.com';
