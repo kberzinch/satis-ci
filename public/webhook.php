@@ -26,7 +26,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             $logfile,
             'Delivery ID:    ' . $_SERVER['HTTP_X_GITHUB_DELIVERY'] . "\n" .
             'Release ID:     ' . $payload['release']['id'] . "\n" .
-            'Repository:     ' . $payload['repository']['full_name'] . "\n" .
+            'Repository:     ' . $payload['repository']['full_name'] . "\n\n" .
             FILE_APPEND
         );
 
@@ -43,7 +43,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
         passthru(
-            '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../vendor/bin/satis build --no-interaction --repository-url '
+            __DIR__ . '/../vendor/bin/satis build --no-interaction --repository-url '
                 . $payload['repository']['clone_url'] . ' ' . __DIR__ . '/../satis.json ' . __DIR__ . '/../build/ >> '
                 . $logfile . ' 2>&1',
             $return_value
