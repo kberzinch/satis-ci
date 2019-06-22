@@ -79,6 +79,19 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             }
         }
 
+        $composer_auth_blob = json_encode(
+            [
+                'http-basic' => [
+                    which_github() => [
+                        'username' => 'x-access-token',
+                        'password' => token(),
+                    ],
+                ],
+            ]
+        );
+
+        putenv('COMPOSER_AUTH=' . $composer_auth_blob);
+
         if (!$repo_is_added) {
             file_put_contents($logfile, "\n# satis.json does not have this repository configured\n", FILE_APPEND);
             passthru(
@@ -102,19 +115,6 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
                 die;
             }
         }
-
-        $composer_auth_blob = json_encode(
-            [
-                'http-basic' => [
-                    which_github() => [
-                        'username' => 'x-access-token',
-                        'password' => token(),
-                    ],
-                ],
-            ]
-        );
-
-        putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
         file_put_contents($logfile, "\n# Running satis build\n", FILE_APPEND);
 
