@@ -32,7 +32,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 
         echo 'OK, log file created at ' . $logfile;
 
-        $satis_dot_json = file_get_contents(__DIR__ . '/satis.json');
+        $satis_dot_json = file_get_contents(__DIR__ . '/../satis.json');
 
         if (false === $satis_dot_json) {
             file_put_contents($logfile, '# satis.json does not exist or is unreadable');
