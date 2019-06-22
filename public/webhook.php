@@ -35,7 +35,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         $satis_dot_json = file_get_contents(__DIR__ . '/../satis.json');
 
         if (false === $satis_dot_json) {
-            file_put_contents($logfile, "\n# satis.json does not exist or is unreadable");
+            file_put_contents($logfile, "\n# satis.json does not exist or is unreadable", FILE_APPEND);
             $log = file_get_contents($logfile);
             if (false === $log) {
                 $log = 'Could not read log file.';
@@ -54,7 +54,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         $satis_dot_json = json_decode($satis_dot_json);
 
         if (null === $satis_dot_json) {
-            file_put_contents($logfile, "\n# satis.json does not contain valid JSON");
+            file_put_contents($logfile, "\n# satis.json does not contain valid JSON", FILE_APPEND);
             $log = file_get_contents($logfile);
             if (false === $log) {
                 $log = 'Could not read log file.';
@@ -80,7 +80,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         }
 
         if (!$repo_is_added) {
-            file_put_contents($logfile, "\n# satis.json does not have this repository configured\n");
+            file_put_contents($logfile, "\n# satis.json does not have this repository configured\n", FILE_APPEND);
             passthru(
                 '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../add.sh ' . $payload['repository']['clone_url'] . ' >> '
                     . $logfile . ' 2>&1',
@@ -116,7 +116,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 
         putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
-        file_put_contents($logfile, "\n# Running satis build\n");
+        file_put_contents($logfile, "\n# Running satis build\n", FILE_APPEND);
 
         passthru(
             '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../build.sh ' . $payload['repository']['clone_url'] . ' >> '
