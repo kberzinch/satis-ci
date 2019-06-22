@@ -20,6 +20,8 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 
         $logfile = __DIR__ . '/' . $repo . '/' . $payload['release']['id'] . '.txt';
 
+        mkdir(__DIR__ . '/' . $repo, 0700, true);
+
         file_put_contents(
             $logfile,
             'Delivery ID:    ' . $_SERVER['HTTP_X_GITHUB_DELIVERY'] . "\n" .
@@ -27,6 +29,8 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             'Repository:     ' . $payload['repository']['full_name'] . "\n" .
             FILE_APPEND
         );
+
+        echo 'OK, log file created at ' . $logfile;
 
         $composer_auth_blob = json_encode(
             [
