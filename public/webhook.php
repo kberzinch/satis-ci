@@ -32,6 +32,77 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 
         echo 'OK, log file created at ' . $logfile;
 
+        $satis_dot_json = file_get_contents(__DIR__ . '/satis.json');
+
+        if (false === $satis_dot_json) {
+            file_put_contents($logfile, '# satis.json does not exist or is unreadable');
+            $log = file_get_contents($logfile);
+            if (false === $log) {
+                $log = 'Could not read log file.';
+            }
+            if (isset($email_from, $email_to)) {
+                mail(
+                    $email_to,
+                    '[' . $payload['repository']['full_name'] . '] Release publication failed',
+                    $log,
+                    'From: ' . $email_from
+                );
+            }
+            exit;
+        }
+
+        $satis_dot_json = json_decode($satis_dot_json);
+
+        if (null === $satis_dot_json) {
+            file_put_contents($logfile, '# satis.json does not contain valid JSON');
+            $log = file_get_contents($logfile);
+            if (false === $log) {
+                $log = 'Could not read log file.';
+            }
+            if (isset($email_from, $email_to)) {
+                mail(
+                    $email_to,
+                    '[' . $payload['repository']['full_name'] . '] Release publication failed',
+                    $log,
+                    'From: ' . $email_from
+                );
+            }
+            exit;
+        }
+
+        $repo_is_added = false;
+
+        foreach ($satis_dot_json->repositories as $repository) {
+            if ($repository->url === $payload['repository']['clone_url']) {
+                $repo_is_added = true;
+                break;
+            }
+        }
+
+        if (!$repo_is_added) {
+            file_put_contents($logfile, "# satis.json does not have this repository configured\n");
+            passthru(
+                '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../add.sh ' . $payload['repository']['clone_url'] . ' >> '
+                    . $logfile . ' 2>&1',
+                $return_value
+            );
+            if (0 !== $return_value) {
+                $log = file_get_contents($logfile);
+                if (false === $log) {
+                    $log = 'Could not read log file.';
+                }
+                if (isset($email_from, $email_to)) {
+                    mail(
+                        $email_to,
+                        '[' . $payload['repository']['full_name'] . '] Release publication failed',
+                        $log,
+                        'From: ' . $email_from
+                    );
+                }
+                die;
+            }
+        }
+
         $composer_auth_blob = json_encode(
             [
                 'http-basic' => [
@@ -46,8 +117,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         putenv('COMPOSER_AUTH=' . $composer_auth_blob);
 
         passthru(
-            __DIR__ . '/../vendor/bin/satis build --no-interaction --repository-url '
-                . $payload['repository']['clone_url'] . ' ' . __DIR__ . '/../satis.json ' . __DIR__ . '/../build/ >> '
+            '/bin/bash -x -e -o pipefail ' . __DIR__ . '/../build.sh ' . $payload['repository']['clone_url'] . ' >> '
                 . $logfile . ' 2>&1',
             $return_value
         );

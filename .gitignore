@@ -3,6 +3,7 @@
 !/public/setup.php
 !/public/finish.php
 /vendor/
+/build/
 config.php
 satis.json
 *.pem
