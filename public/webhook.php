@@ -34,8 +34,11 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
 
         $composer_auth_blob = json_encode(
             [
-                'github-oauth' => [
-                    which_github() => token(),
+                'http-basic' => [
+                    which_github() => [
+                        'username' => 'x-access-token',
+                        'password' => token(),
+                    ]
                 ],
             ]
         );
