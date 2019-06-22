@@ -109,7 +109,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
                     which_github() => [
                         'username' => 'x-access-token',
                         'password' => token(),
-                    ]
+                    ],
                 ],
             ]
         );
