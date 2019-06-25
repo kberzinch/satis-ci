@@ -100,6 +100,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
                 $return_value
             );
             if (0 !== $return_value) {
+                file_put_contents($logfile, "\n# satis add failed with error code " . $return_value, FILE_APPEND);
                 $log = file_get_contents($logfile);
                 if (false === $log) {
                     $log = 'Could not read log file.';
@@ -125,6 +126,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
         );
 
         if (0 !== $return_value) {
+            file_put_contents($logfile, "\n# satis build failed with error code " . $return_value, FILE_APPEND);
             $log = file_get_contents($logfile);
             if (false === $log) {
                 $log = 'Could not read log file.';
@@ -139,6 +141,7 @@ switch ($_SERVER['HTTP_X_GITHUB_EVENT']) {
             }
             die;
         }
+        file_put_contents($logfile, "\n# The build completed successfully", FILE_APPEND);
         exit;
     default:
         echo 'Unrecognized event ' . $_SERVER['HTTP_X_GITHUB_EVENT'];
