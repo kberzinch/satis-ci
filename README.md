@@ -6,7 +6,7 @@ Plumbing to publish Composer packages from GitHub to Satis, with as little fuss 
 ## Initial server setup
 1. Clone this repository to your server and set up a PHP web server.
 2. Run `composer install` to install dependencies.
-3. Validate by visiting `/github` - you should get a signature verification failure.
+3. Validate by visiting `/webhook` - you should get a signature verification failure.
 
 ## GitHub App setup
 Once your server is set up, visit `/setup` and follow the prompts.
