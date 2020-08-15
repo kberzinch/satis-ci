@@ -1,3 +1,9 @@
+### :warning: This project has been deprecated.
+
+I recommend using [Concourse](https://concourse-ci.org/) to achieve the same results.
+
+----
+
 # satis-ci
 [![GitHub license](https://img.shields.io/github/license/kberzinch/satis-ci.svg?style=flat-square)](https://raw.githubusercontent.com/kberzinch/deploy/master/LICENSE.md)
 
